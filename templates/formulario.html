@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Pesquisa da Oficina + Certificado</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=DM+Serif+Display&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --azul: #022253;
+      --azul-claro: #eaf1fb;
+      --azul-borda: #cfd9ec;
+      --texto: #1f2937;
+      --texto-suave: #667085;
+      --fundo: #eef2f7;
+      --branco: #ffffff;
+      --erro-bg: #fff1f1;
+      --erro-borda: #f2c2c2;
+      --erro-texto: #b42318;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Poppins', Arial, sans-serif;
+      background: var(--fundo);
+      padding: 32px 16px;
+      color: var(--texto);
+    }
+
+    .wrap {
+      max-width: 920px;
+      margin: 0 auto;
+    }
+
+    .hero {
+      background: var(--azul);
+      color: white;
+      border-radius: 24px;
+      padding: 26px 30px;
+      margin-bottom: 20px;
+      box-shadow: 0 14px 35px rgba(2, 34, 83, 0.18);
+    }
+
+    .hero-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      flex-wrap: wrap;
+      text-align: center;
+    }
+
+    .hero-logo {
+      width: 240px;
+      height: auto;
+      object-fit: contain;
+      display: block;
+    }
+
+    .hero-texto h1 {
+      margin: 0;
+      font-family: 'DM Serif Display', serif;
+      font-size: 38px;
+      font-weight: 400;
+      letter-spacing: 0.2px;
+      line-height: 1.05;
+    }
+
+    .hero-texto p {
+      margin: 8px 0 0;
+      font-size: 15px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.88);
+    }
+
+    .card {
+      background: white;
+      border-radius: 22px;
+      padding: 26px;
+      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.08);
+      border: 1px solid rgba(2, 34, 83, 0.06);
+    }
+
+    .erro {
+      background: var(--erro-bg);
+      border: 1px solid var(--erro-borda);
+      color: var(--erro-texto);
+      padding: 12px 14px;
+      border-radius: 12px;
+      margin-bottom: 18px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .grid {
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      color: #0f1f44;
+      letter-spacing: 0.2px;
+    }
+
+    input[type="text"],
+    select {
+      width: 100%;
+      padding: 16px 16px;
+      border: 1px solid #d8dfeb;
+      border-radius: 14px;
+      font-size: 15px;
+      font-family: inherit;
+      background: #fff;
+      outline: none;
+      transition: 0.18s ease;
+    }
+
+    input[type="text"]:focus,
+    select:focus {
+      border-color: #022253;
+      box-shadow: 0 0 0 4px rgba(2, 34, 83, 0.12);
+    }
+
+    .hint {
+      margin-top: 6px;
+      font-size: 12px;
+      color: var(--texto-suave);
+      font-weight: 500;
+    }
+
+    .avaliacao-box {
+      background: #f8fbff;
+      border: 1px solid var(--azul-borda);
+      border-radius: 18px;
+      padding: 20px 18px;
+    }
+
+    .avaliacao-topo {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+      font-size: 13px;
+      color: var(--texto-suave);
+      font-weight: 600;
+    }
+
+    .rating {
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      gap: 10px;
+    }
+
+    .rating input {
+      display: none;
+    }
+
+    .rating label {
+      margin: 0;
+      cursor: pointer;
+      padding: 12px 6px;
+      border-radius: 14px;
+      border: 1px solid transparent;
+      text-align: center;
+      transition: 0.16s ease;
+      background: transparent;
+    }
+
+    .rating label:hover {
+      background: rgba(2, 34, 83, 0.04);
+      border-color: rgba(2, 34, 83, 0.08);
+    }
+
+    .rating input:checked + label {
+      background: rgba(2, 34, 83, 0.08);
+      border-color: rgba(2, 34, 83, 0.14);
+    }
+
+    .rating .numero {
+      display: block;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--azul);
+      margin-bottom: 10px;
+      line-height: 1;
+    }
+
+    .rating .estrela {
+      display: block;
+      font-size: 28px;
+      line-height: 1;
+      color: #c5d1e6;
+      transition: 0.2s;
+    }
+
+    .rating label:hover .estrela,
+    .rating input:checked + label .estrela {
+      color: var(--azul);
+    }
+
+    .actions {
+      margin-top: 24px;
+    }
+
+    button {
+      width: 100%;
+      background: var(--azul);
+      color: white;
+      border: none;
+      border-radius: 14px;
+      padding: 16px 20px;
+      font-size: 15px;
+      font-weight: 800;
+      font-family: inherit;
+      cursor: pointer;
+      transition: 0.18s ease;
+      box-shadow: 0 12px 24px rgba(2, 34, 83, 0.14);
+    }
+
+    button:hover {
+      background: #043066;
+      transform: translateY(-1px);
+    }
+
+    .footer-note {
+      margin-top: 12px;
+      font-size: 12px;
+      color: var(--texto-suave);
+      text-align: center;
+      font-weight: 500;
+    }
+
+    @media (max-width: 860px) {
+      .rating {
+        grid-template-columns: repeat(5, 1fr);
+      }
+
+      .hero-texto h1 {
+        font-size: 32px;
+      }
+
+      .hero-logo {
+        width: 200px;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .rating {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .hero {
+        padding: 22px 20px;
+      }
+
+      .card {
+        padding: 20px;
+      }
+
+      .hero-texto h1 {
+        font-size: 28px;
+      }
+
+      .hero-logo {
+        width: 170px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <div class="hero-header">
+        <img src="../static/img/logo_govplan.png" alt="Govplan" class="hero-logo">
+        <div class="hero-texto">
+          <h1>Pesquisa da Oficina</h1>
+          <p>Preencha as informações abaixo e gere seu certificado.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      {% if erro %}
+        <div class="erro">{{ erro }}</div>
+      {% endif %}
+
+      <form method="POST" action="/certificado">
+        <div class="grid">
+          <div class="field">
+            <label for="nome">Nome Completo</label>
+            <input type="text" id="nome" name="nome" required>
+          </div>
+
+          <div class="field">
+            <label for="orgao">Órgão</label>
+            <input type="text" id="orgao" name="orgao" required>
+          </div>
+
+          <div class="field">
+            <label for="uf">UF</label>
+            <select id="uf" name="uf" required>
+              <option value="">Selecione</option>
+              <option>AC</option><option>AL</option><option>AP</option><option>AM</option>
+              <option>BA</option><option>CE</option><option>DF</option><option>ES</option>
+              <option>GO</option><option>MA</option><option>MT</option><option>MS</option>
+              <option>MG</option><option>PA</option><option>PE</option><option>PB</option>
+              <option>PR</option><option>PI</option><option>RJ</option><option>RN</option>
+              <option>RS</option><option>RO</option><option>RR</option><option>SC</option>
+              <option>SP</option><option>TO</option><option>SE</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="pca">Já fez PCA?</label>
+            <select id="pca" name="pca" required>
+              <option value="">Selecione</option>
+              <option>Sim</option>
+              <option>Não</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="publicou">Já publicou o PCA 2026?</label>
+            <select id="publicou" name="publicou" required>
+              <option value="">Selecione</option>
+              <option>Já publiquei</option>
+              <option>Não publiquei</option>
+              <option>Vou fazer para 2027</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="primeira_vez">Foi sua primeira vez na oficina?</label>
+            <select id="primeira_vez" name="primeira_vez" required>
+              <option value="">Selecione</option>
+              <option>Sim</option>
+              <option>Não</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="gestao">Tem conseguido fazer a gestão do PCA?</label>
+            <select id="gestao" name="gestao" required>
+              <option value="">Selecione</option>
+              <option>Sim</option>
+              <option>Não</option>
+              <option>Mais ou menos</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="interesse">Receber proposta Govplan</label>
+            <select id="interesse" name="interesse" required>
+              <option value="">Selecione</option>
+              <option>Proposta Govplan</option>
+              <option>Reunião para diagnóstico do PCA</option>
+              <option>Sem interesse</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="palavra_chave">Palavra-Chave</label>
+            <input
+              type="text"
+              id="palavra_chave"
+              name="palavra_chave"
+              required
+              placeholder="Digite a palavra-chave informada na oficina"
+            >
+            <div class="hint">O certificado será gerado somente se a palavra-chave estiver correta.</div>
+          </div>
+
+          <div class="field">
+            <label>Avaliação geral da oficina</label>
+            <div class="avaliacao-box">
+              <div class="avaliacao-topo">
+                <span>Selecione uma nota de 1 a 10</span>
+                <span>1 = baixa | 10 = excelente</span>
+              </div>
+
+              <div class="rating">
+                <input type="radio" name="avaliacao" id="nota1" value="1" required>
+                <label for="nota1"><span class="numero">1</span><span class="estrela">★</span></label>
+
+                <input type="radio" name="avaliacao" id="nota2" value="2">
+                <label for="nota2"><span class="numero">2</span><span class="estrela">★</span></label>
+
+                <input type="radio" name="avaliacao" id="nota3" value="3">
+                <label for="nota3"><span class="numero">3</span><span class="estrela">★</span></label>
+
+                <input type="radio" name="avaliacao" id="nota4" value="4">
+                <label for="nota4"><span class="numero">4</span><span class="estrela">★</span></label>
+
+                <input type="radio" name="avaliacao" id="nota5" value="5">
+                <label for="nota5"><span class="numero">5</span><span class="estrela">★</span></label>
+
+                <input type="radio" name="avaliacao" id="nota6" value="6">
+                <label for="nota6"><span class="numero">6</span><span class="estrela">★</span></label>
+
+                <input type="radio" name="avaliacao" id="nota7" value="7">
+                <label for="nota7"><span class="numero">7</span><span class="estrela">★</span></label>
+
+                <input type="radio" name="avaliacao" id="nota8" value="8">
+                <label for="nota8"><span class="numero">8</span><span class="estrela">★</span></label>
+
+                <input type="radio" name="avaliacao" id="nota9" value="9">
+                <label for="nota9"><span class="numero">9</span><span class="estrela">★</span></label>
+
+                <input type="radio" name="avaliacao" id="nota10" value="10">
+                <label for="nota10"><span class="numero">10</span><span class="estrela">★</span></label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button type="submit">Enviar e gerar certificado</button>
+        </div>
+
+        <div class="footer-note">
+          Depois do envio, o certificado será exibido para impressão ou salvamento em PDF.
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+</html>
